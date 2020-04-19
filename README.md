@@ -16,7 +16,7 @@ The `-y`, `-r`, and `-n` flags are all required.
 * `-r`: flag for the round name (Qualification, Round1C, etc.)
 * `-n`: flag for the problem name
 
-If `-h` is included the program displays usage and then it exits. If the required flags are included, it will look for the file `<practice_folder>/<year>/<round>/<name>/main.py` and abort if it is found, otherwise the file will be created along with any necessary folders. If `<year>` is less than 2018 it will use the classic template, and otherwise it will use the standard template unless interactive is specified with the `-i` flag.
+If `-h` is included the program displays usage and then it exits. If the required flags are included, it will look for the file `<repo_root>/<year>/<round>/<name>/main.py` and abort if it is found, otherwise the file will be created along with any necessary folders. If `<year>` is less than 2018 it will use the classic template, and otherwise it will use the standard template unless interactive is specified with the `-i` flag.
 
 ### Prerequisites
 `new_problem.py` uses pathlib so needs to be run with python3.4+.

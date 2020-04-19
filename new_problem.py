@@ -2,7 +2,7 @@
 
 import sys, getopt, shutil
 from pathlib import Path
-dir_path = Path(__file__).parent.resolve()
+SCRIPT_PATH = Path(__file__).parent.resolve()
 
 def main(argv):
 
@@ -58,7 +58,7 @@ def make_folder(year, round_name, name):
   '''
   Throws FileExistsError if folder already exists.
   '''
-  problem_path = dir_path / year/ round_name / name
+  problem_path = SCRIPT_PATH / year / round_name / name
   problem_path.mkdir(parents=True)
   print('Created folder {}/{}/{}.'.format(year, round_name, name))
   return problem_path
@@ -80,7 +80,7 @@ def copy_template(year, path, interactive=False):
     template_name = prefix + '-'
   template_name += "template.py"
   # Copy template file.
-  template_path = dir_path / 'templates' / template_name
+  template_path = SCRIPT_PATH / 'templates' / template_name
   dest_path = path / 'main.py'
   shutil.copy(str(template_path), str(dest_path))
   # Create tests file.

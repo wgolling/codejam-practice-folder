@@ -21,6 +21,14 @@ If `-h` is included the program displays usage and then it exits. If the require
 ### Prerequisites
 `new_problem.py` uses pathlib so needs to be run with python3.4+.
 
+## TODO
+
+* If current working directory is a subdirectory of `<repo_root>` then make some flags optional. For example if CWD is `<repo_root>/2018/Round1C` then user should only have to specify problem name.
+
+* Change CWD to the newly created folder?
+
+* Include `interactive_runner.py` from the appropriate year in an interactive template.
+
 ## Author
 
 * **William Gollinger**

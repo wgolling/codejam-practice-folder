@@ -19,11 +19,13 @@ The `-n` flag is always required, and `-y` and `-r` flags are required unless th
 If `-h` is included the program displays usage and then it exits. If the required flags are included, it will look for the file `<repo_root>/<year>/<round>/<name>/main.py` and abort if it is found, otherwise the file will be created along with any necessary folders. If `<year>` is less than 2018 it will use the classic template, and otherwise it will use the standard template unless interactive is specified with the `-i` flag.
 
 ### Prerequisites
-`new_problem.py` uses pathlib so needs to be run with python3.4+.
+`new_problem.py` uses pathlib so needs to be run with python 3.4+.
 
 ## TODO
 
 * Change CWD to the newly created folder?
+
+* Improve templates.
 
 ## Author
 

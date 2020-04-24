@@ -1,6 +1,6 @@
 v1.1.0:
 ------
-- Change usage so that the user doesn't have to include year or round flags if they are in a subdirectory of the repo root.
+- Add feature where the user doesn't have to include year or round flags if they are in a subdirectory of the repo root.
 - Include an interactive runner for interactive problems in years >= 2019.
 
 v1.0.0:

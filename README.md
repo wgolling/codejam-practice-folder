@@ -8,7 +8,7 @@ Clone the repo into your practice folder, and run the `new_problem.py` script wi
 
     python3 <path>/new_problem.py [-h] [-i] -y <year> -r <round> -n <name>
 
-The `-y`, `-r`, and `-n` flags are all required.
+The `-n` flag is always required, and `-y` and `-r` flags are required unless the current working directory is a subdirectory of `<repo_root>`. If CWD is of the form `<repo_root>/<year>` then the user doesn't need to specify the year and if it is of the form `<repo_root>/<year>/<round>` then user also doesn't need to specify the round, but they can still specify a different year or round if they want.
 
 * `-h`: display usage (optional)
 * `-i`: interactive problem (optional)
@@ -22,8 +22,6 @@ If `-h` is included the program displays usage and then it exits. If the require
 `new_problem.py` uses pathlib so needs to be run with python3.4+.
 
 ## TODO
-
-* If current working directory is a subdirectory of `<repo_root>` then make some flags optional. For example if CWD is `<repo_root>/2018/Round1C` then user should only have to specify problem name.
 
 * Change CWD to the newly created folder?
 

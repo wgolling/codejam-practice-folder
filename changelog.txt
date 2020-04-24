@@ -1,0 +1,7 @@
+v1.1.0:
+------
+- Change usage so that the user doesn't have to include year or round flags if they are in a subdirectory of the repo root.
+
+v1.0.0:
+------
+- first version.

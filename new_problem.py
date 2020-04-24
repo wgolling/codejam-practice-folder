@@ -106,6 +106,12 @@ def copy_template(year, path, interactive=False):
   template_path = SCRIPT_PATH / 'templates' / template_name
   dest_path = path / 'main.py'
   shutil.copy(str(template_path), str(dest_path))
+  if interactive and year >= 2019:
+    # Although there are interactive problems in 2018 their local testing tool
+    # is bundled with an interactive runner.
+    runner_path = SCRIPT_PATH / 'templates' / 'interactive_runner.py'
+    runner_dest = path / 'interactive_runner.py'
+    shutil.copy(str(runner_path), str(runner_dest))
   rel_path = path.relative_to(path.parents[2])
   print('Copied {} template to {}.'.format(prefix, str(rel_path  / 'main.py')))
   # Create tests file.

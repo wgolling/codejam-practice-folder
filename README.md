@@ -25,8 +25,6 @@ If `-h` is included the program displays usage and then it exits. If the require
 
 * Change CWD to the newly created folder?
 
-* Include `interactive_runner.py` from the appropriate year in an interactive template.
-
 ## Author
 
 * **William Gollinger**

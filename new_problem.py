@@ -106,7 +106,7 @@ class FolderMaker:
     prefix = ''
     if int(self.year) < 2018:
       prefix = 'pre2018'
-    elif interactive:
+    elif self.interactive:
       prefix = 'interactive'
     if len(prefix) > 0:
       template_name = prefix + '-'
@@ -116,7 +116,7 @@ class FolderMaker:
     template_path = SCRIPT_PATH / 'templates' / template_name
     dest_path = path / 'main.py'
     shutil.copy(str(template_path), str(dest_path))
-    if self.interactive and year >= 2019:
+    if self.interactive and int(self.year) >= 2019:
       # Although there are interactive problems in 2018 their local testing tool
       # is bundled with an interactive runner.
       runner_path = SCRIPT_PATH / 'templates' / 'interactive_runner.py'

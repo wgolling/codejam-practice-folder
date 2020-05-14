@@ -23,6 +23,8 @@ If `-h` is included the program displays usage and then it exits. If the require
 
 ## TODO
 
+* Add functionality for multiple coding competitions.
+
 * Change CWD to the newly created folder?
 
 * Improve templates.

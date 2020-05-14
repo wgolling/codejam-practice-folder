@@ -102,7 +102,8 @@ class FolderMaker:
     Throws FileExistsError if folder already exists.
     '''
     # Create folder.
-    self.problem_path.mkdir(parents=True)
+    path = self.problem_path
+    path.mkdir(parents=True)
     print('Created folder {}/{}/{}.'.format(self.year, self.round_name, self.prob_name))
     '''
     In 2018 two changes were made in the contest format:
@@ -120,7 +121,6 @@ class FolderMaker:
       template_name = prefix + '-'
     template_name += "template.py"
     # Copy template file.
-    path = self.problem_path
     template_path = SCRIPT_PATH / 'templates' / template_name
     dest_path = path / 'main.py'
     shutil.copy(str(template_path), str(dest_path))

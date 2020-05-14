@@ -13,8 +13,12 @@ def solve(a, b):
     b = m - 1
   solve(a, b)
 
-T = int(input())
-for _ in range(T):
-  a, b = map(int, input().split())
-  _ = int(input())
-  solve(a + 1, b)
+def main():
+  T = int(input())
+  for _ in range(T):
+    a, b = map(int, input().split())
+    _ = int(input())
+    solve(a + 1, b)
+
+if __name__ == "__main__":
+  main()

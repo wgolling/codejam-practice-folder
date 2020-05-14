@@ -4,11 +4,44 @@ import sys, getopt, shutil
 from pathlib import Path
 SCRIPT_PATH = Path(__file__).parent.resolve()
 
+class Args:
+  def __init__(self, year, round_name, prob_name, interactive):
+    # If cwd is a subdirectory of the script's directoy, some arguments are optional.
+    try:
+      rel_parts = Path.cwd().relative_to(SCRIPT_PATH).parts
+    except ValueError:
+      rel_parts = []
+    # Validate year.
+    if not year and len(rel_parts) < 1:
+      print_usage()
+    elif not year:
+      try:
+        year = int(rel_parts[0])
+      except:
+        exit('Year {} not an integer.'.format(rel_parts[0]))
+    # Check round.
+    if not round_name and len(rel_parts) < 2:
+      print_usage()
+    elif not round_name:
+      round_name = rel_parts[1]
+    # Check name.
+    if not prob_name:
+      print_usage()
+    # Interactive option is only available for 2018 and later.
+    if year < 2018 and interactive:
+      exit('Interactive problems are only in 2018 and later.')
+    self.year         = year
+    self.round_name   = round_name
+    self.prob_name    = prob_name
+    self.interactive  = interactive
+
 def main(argv):
   # Check that required arguments were included.
   # If CWD is SCRIPT_PATH/<year> or SCRIPT_PATH/<year>/<round> then not all 
   # arguments are required.
-  year, round_name, name, interactive = validate_input(get_input(argv))
+  a = process_input(argv)
+  year, round_name, name, interactive = a.year, a.round_name, a.prob_name, a.interactive 
+
   # Make new folder.
   try:
     p = make_folder(str(year), round_name, name)
@@ -26,7 +59,7 @@ def exit(message, err=True):
   print(message)
   sys.exit(1 if err else 0)
 
-def get_input(argv):
+def process_input(argv):
   year, round_name, name = None, None, None
   interactive = False                                                         # In 2018 interactive problems were added.
   try:
@@ -48,34 +81,7 @@ def get_input(argv):
         round_name = arg
       elif opt in ('-n', '--name'):
         name = arg        
-  return (year, round_name, name, interactive)
-
-def validate_input(data):
-  year, round_name, name, interactive = data
-  try:
-    rel_parts = Path.cwd().relative_to(SCRIPT_PATH).parts
-  except ValueError:
-    rel_parts = []
-  # Check year.
-  if not year and len(rel_parts) < 1:
-    print_usage()
-  elif not year:
-    try:
-      year = int(rel_parts[0])
-    except:
-      exit('Year {} not an integer.'.format(rel_parts[0]))
-  # Check round.
-  if not round_name and len(rel_parts) < 2:
-    print_usage()
-  elif not round_name:
-    round_name = rel_parts[1]
-  # Check name.
-  if not name:
-    print_usage()
-  # Interactive option is only available for 2018 and later.
-  if year < 2018 and interactive:
-    exit('Interactive problems are only in 2018 and later.')
-  return year, round_name, name, interactive
+  return Args(year, round_name, name, interactive)
 
 def make_folder(year, round_name, name):
   '''

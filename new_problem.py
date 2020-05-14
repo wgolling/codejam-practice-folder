@@ -51,6 +51,9 @@ def process_input(argv):
   return Args(year, round_name, name, interactive)
 
 class Args:
+  '''
+  An elementary data structure containing validated input.
+  '''
   def __init__(self, year, round_name, prob_name, interactive):
     # If cwd is a subdirectory of the script's directoy, some arguments are optional.
     try:
@@ -76,12 +79,17 @@ class Args:
     # Interactive option is only available for 2018 and later.
     if year < 2018 and interactive:
       exit('Interactive problems are only in 2018 and later.')
+    # Initialize fields.
     self.year         = year
     self.round_name   = round_name
     self.prob_name    = prob_name
     self.interactive  = interactive
 
 class FolderMaker:
+  '''
+  A class handling the OS operations of making the new problem folder and
+  copying the appropriate template files.
+  '''
   def __init__(self, a):
     self.year         = str(a.year)
     self.round_name   = a.round_name

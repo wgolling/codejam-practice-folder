@@ -62,27 +62,35 @@ class Args:
       rel_parts = Path.cwd().relative_to(SCRIPT_PATH).parts
     except ValueError:
       rel_parts = []
-    # Check competition.
-    if not competition and len(rel_parts) < 1:
-      print_usage()
-    elif not competition:
-      competition = rel_parts[0]
-    # Validate year.
-    if not year and len(rel_parts) < 2:
-      print_usage()
-    elif not year:
-      try:
-        year = int(rel_parts[1])
-      except:
-        exit('Year {} not an integer.'.format(rel_parts[1]))
-    # Check round.
-    if not round_name and len(rel_parts) < 3:
-      print_usage()
-    elif not round_name:
-      round_name = rel_parts[2]
+    # Validate competition variable.
+    if not competition: 
+      if len(rel_parts) < 1:
+        print_usage()
+      else:
+        competition = rel_parts[0]
+    else:
+      competition = str(competition)
+    # Validate year variable.
+    if not year:
+      if len(rel_parts) < 2:
+        print_usage()
+      else:
+        year = self.try_year(rel_parts[1])
+    else:
+        year = self.try_year(year)
+    # Validate round variable.
+    if not round_name:
+      if len(rel_parts) < 3:
+        print_usage()
+      else:
+        round_name = rel_parts[2]
+    else:
+      round_name = str(round_name)
     # Check name.
     if not prob_name:
       print_usage()
+    else:
+      prob_name = str(prob_name)
     # Interactive option is only available for 2018 and later.
     if year < 2018 and interactive:
       exit('Interactive problems are only in 2018 and later.')
@@ -92,6 +100,14 @@ class Args:
     self.round_name   = round_name
     self.prob_name    = prob_name
     self.interactive  = interactive
+
+  def try_year(self, year):
+    try:
+      valid_year = int(year)
+    except:
+      exit('Year {} not an integer.'.format(year))
+    return valid_year
+
 
 class FolderMaker:
   '''

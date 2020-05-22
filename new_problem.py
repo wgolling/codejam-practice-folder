@@ -45,12 +45,16 @@ def process_input(argv):
         try:
           year = int(arg)
         except:
-          exit('Year must be an integer.')
+          exit('Year {} must be an integer.'.format(year))
       elif opt in ('-r', '--round'):
         round_name = arg
       elif opt in ('-n', '--name'):
-        name = arg        
-  return Args(competition, year, round_name, name, interactive)
+        name = arg       
+  try:
+    a = Args(competition, year, round_name, name, interactive)
+  except Exception as e:
+    exit("{}".format(e))
+  return a
 
 class Args:
   '''
@@ -65,7 +69,7 @@ class Args:
     # Validate competition variable.
     if not competition: 
       if len(rel_parts) < 1:
-        print_usage()
+        raise KeyError("Missing competition name.")
       else:
         competition = rel_parts[0]
     else:
@@ -73,28 +77,28 @@ class Args:
     # Validate year variable.
     if not year:
       if len(rel_parts) < 2:
-        print_usage()
+        raise KeyError("Missing year.")
       else:
         year = self.try_year(rel_parts[1])
     else:
-        year = self.try_year(year)
+      year = self.try_year(year)
     # Validate round variable.
     if not round_name:
       if len(rel_parts) < 3:
-        print_usage()
+        raise KeyError("Missing round name.")
       else:
         round_name = rel_parts[2]
     else:
       round_name = str(round_name)
-    # Check name.
+    # Validate name variable.
     if not prob_name:
-      print_usage()
+        raise KeyError("Missing problem name.")
     else:
       prob_name = str(prob_name)
     # Interactive option is only available for 2018 and later.
     if year < 2018 and interactive:
-      exit('Interactive problems are only in 2018 and later.')
-    # Initialize fields.
+      raise ValueError('Interactive problems are only in 2018 and later.')
+    # Finally, initialize fields.
     self.competition  = competition
     self.year         = year
     self.round_name   = round_name
@@ -103,10 +107,9 @@ class Args:
 
   def try_year(self, year):
     try:
-      valid_year = int(year)
-    except:
-      exit('Year {} not an integer.'.format(year))
-    return valid_year
+      return int(year)
+    except ValueError as e:
+      raise ValueError('Year {} not an integer.'.format(year)) from e
 
 
 class FolderMaker:

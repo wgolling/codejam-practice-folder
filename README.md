@@ -10,7 +10,7 @@ Clone the repo into your practice folder, and run the `new_problem.py` script wi
 
     python3 <path>/new_problem.py [-h] [-i] -c <competition> -y <year> -r <round> -n <name>
 
-The `-n` flag is always required, and the `-c`, `-y` and `-r` flags are required unless the current working directory is a subdirectory of `<repo_root>`. For example if CWD is of the form `<repo_root>/<competition>` then the user doesn't need to specify the competition, and if it is of the form `<repo_root>/<competition>/<year>` then user also doesn't need to specify the year, but they can still specify a different competition or year if they want.
+The `-n` flag is always required, and the `-c`, `-y` and `-r` flags are required unless the current working directory is a subdirectory of `<repo_root>`. For example if CWD is of the form `<repo_root>/<competition>` then the `-c` flag is not required, and if it is of the form `<repo_root>/<competition>/<year>` then user also doesn't need to include `-y`, but they can still specify a different competition or year if they want.
 
 * `-h`: display usage (optional)
 * `-i`: interactive problem (optional)

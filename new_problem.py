@@ -20,17 +20,17 @@ def main(argv):
   sys.exit(0)
 
 def print_usage(err=True):
-  exit('usage: new_problem.py [-h] [-i] -y <year> -r <round> -n <name>', err=err)
+  exit('usage: new_problem.py [-h] [-i] -c <competition> -y <year> -r <round> -n <name>', err=err)
 
 def exit(message, err=True):
   print(message)
   sys.exit(1 if err else 0)
 
 def process_input(argv):
-  year, round_name, name = None, None, None
+  competition, year, round_name, name = None, None, None, None
   interactive = False                                                         # In 2018 interactive problems were added.
   try:
-    opts, args = getopt.getopt(argv, 'hiy:r:n:', ['interactive', 'year=', 'round=', 'name='])
+    opts, args = getopt.getopt(argv, 'hic:y:r:n:', ['interactive', 'competition=' 'year=', 'round=', 'name='])
   except getopt.GetoptError:
     print_usage()
   else:
@@ -39,6 +39,8 @@ def process_input(argv):
         print_usage(err=False)
       elif opt in ('-i', '--interactive'):
         interactive = True
+      elif opt in ('-c', '--competition'):
+        competition = arg
       elif opt in ('-y', '--year'):
         try:
           year = int(arg)
@@ -48,31 +50,36 @@ def process_input(argv):
         round_name = arg
       elif opt in ('-n', '--name'):
         name = arg        
-  return Args(year, round_name, name, interactive)
+  return Args(competition, year, round_name, name, interactive)
 
 class Args:
   '''
   An elementary data structure containing validated input.
   '''
-  def __init__(self, year, round_name, prob_name, interactive):
+  def __init__(self, competition, year, round_name, prob_name, interactive):
     # If cwd is a subdirectory of the script's directoy, some arguments are optional.
     try:
       rel_parts = Path.cwd().relative_to(SCRIPT_PATH).parts
     except ValueError:
       rel_parts = []
+    # Check competition.
+    if not competition and len(rel_parts) < 1:
+      print_usage()
+    elif not competition:
+      competition = rel_parts[0]
     # Validate year.
-    if not year and len(rel_parts) < 1:
+    if not year and len(rel_parts) < 2:
       print_usage()
     elif not year:
       try:
-        year = int(rel_parts[0])
+        year = int(rel_parts[1])
       except:
-        exit('Year {} not an integer.'.format(rel_parts[0]))
+        exit('Year {} not an integer.'.format(rel_parts[1]))
     # Check round.
-    if not round_name and len(rel_parts) < 2:
+    if not round_name and len(rel_parts) < 3:
       print_usage()
     elif not round_name:
-      round_name = rel_parts[1]
+      round_name = rel_parts[2]
     # Check name.
     if not prob_name:
       print_usage()
@@ -80,6 +87,7 @@ class Args:
     if year < 2018 and interactive:
       exit('Interactive problems are only in 2018 and later.')
     # Initialize fields.
+    self.competition  = competition
     self.year         = year
     self.round_name   = round_name
     self.prob_name    = prob_name
@@ -91,11 +99,12 @@ class FolderMaker:
   copying the appropriate template files.
   '''
   def __init__(self, a):
+    self.competition  = a.competition
     self.year         = str(a.year)
     self.round_name   = a.round_name
     self.prob_name    = a.prob_name
     self.interactive  = a.interactive
-    self.problem_path = SCRIPT_PATH / self.year / self.round_name / self.prob_name
+    self.problem_path = SCRIPT_PATH / self.competition / self.year / self.round_name / self.prob_name
 
   def make_folder(self):
     '''
@@ -104,7 +113,7 @@ class FolderMaker:
     # Create folder.
     path = self.problem_path
     path.mkdir(parents=True)
-    print('Created folder {}/{}/{}.'.format(self.year, self.round_name, self.prob_name))
+    print('Created folder {}/{}/{}/{}.'.format(self.competition, self.year, self.round_name, self.prob_name))
     '''
     In 2018 two changes were made in the contest format:
     1) Rather than outputting results to a file, the code itself is uploaded

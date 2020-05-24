@@ -1,3 +1,8 @@
+Current update:
+--------------
+- Added functionality for multiple competitions. (Note: this obsoletes the old interface.)
+- Wrote unit tests for the Args class, including context managers for setting up/tearing down test folders and changing the CWD.
+
 v1.1.1:
 ------
 - Make code more modular by introducing the Args class to validate input and the FolderMaking class to handle the OS operations.

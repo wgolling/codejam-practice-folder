@@ -26,7 +26,9 @@ If `-h` is included the program displays usage and then it exits. If the require
 
 ## TODO
 
-* Change CWD to the newly created folder?
+* Unit test the FolderMaker class.
+
+* Proper documentation.
 
 * Improve templates.
 

@@ -131,7 +131,7 @@ class TestArgs(TestCase):
     root = Node("root", [comp])
     with TestFolders(root) as test_folders:
       comp_name = comp.path.parts[-1]
-      # Move to competition folder
+      # Move to competition folder.
       with Cwd(comp.path) as cwd:
         # Missing competition name.
         a = Args(None, "2017", "TestRound", "TestProblem", False)
@@ -140,7 +140,77 @@ class TestArgs(TestCase):
         assert(a.round_name == "TestRound")
         assert(a.prob_name == "TestProblem")
         assert(a.interactive == False)
-        # Specified competition name.
+        # Specified different input.
+        a = Args("OtherComp", "2017", "TestRound", "TestProblem", False)
+        assert(a.competition == "OtherComp")
+        assert(a.year == 2017)
+        assert(a.round_name == "TestRound")
+        assert(a.prob_name == "TestProblem")
+        assert(a.interactive == False)
+
+  def test_constructor_from_year_folder(self):
+    year = Node("2020", [])
+    comp = Node("Comp", [year])
+    root = Node("root", [comp])
+    with TestFolders(root) as test_folders:
+      year_name = year.path.parts[-1]
+      comp_name = comp.path.parts[-1]
+      # Move to year folder.
+      with Cwd(year.path) as cwd:
+        # Missing competition and year.
+        a = Args(None, None, "TestRound", "TestProblem", False)
+        assert(a.competition == comp_name)
+        assert(a.year == int(year_name))
+        assert(a.round_name == "TestRound")
+        assert(a.prob_name == "TestProblem")
+        assert(a.interactive == False)
+        # Specified different input.
+        a = Args("OtherComp", "2017", "TestRound", "TestProblem", False)
+        assert(a.competition == "OtherComp")
+        assert(a.year == 2017)
+        assert(a.round_name == "TestRound")
+        assert(a.prob_name == "TestProblem")
+        assert(a.interactive == False)
+
+  def test_constructor_from_round_folder(self):
+    rnd = Node("Round", [])
+    year = Node("2020", [rnd])
+    comp = Node("Comp", [year])
+    root = Node("root", [comp])
+    with TestFolders(root) as test_folders:
+      round_name = rnd.path.parts[-1]
+      year_name = year.path.parts[-1]
+      comp_name = comp.path.parts[-1]
+      # Move to round folder
+      with Cwd(rnd.path) as cwd:
+        # Missing competition, year and round.
+        a = Args(None, None, None, "TestProblem", False)
+        assert(a.competition == comp_name)
+        assert(a.year == int(year_name))
+        assert(a.round_name == round_name)
+        assert(a.prob_name == "TestProblem")
+        assert(a.interactive == False)
+        # Specified different input.
+        a = Args("OtherComp", "2017", "TestRound", "TestProblem", False)
+        assert(a.competition == "OtherComp")
+        assert(a.year == 2017)
+        assert(a.round_name == "TestRound")
+        assert(a.prob_name == "TestProblem")
+        assert(a.interactive == False)
+
+  def test_constructor_from_problem_folder(self):
+    prob = Node("Problem", [])
+    rnd = Node("Round", [prob])
+    year = Node("2020", [rnd])
+    comp = Node("Comp", [year])
+    root = Node("root", [comp])
+    with TestFolders(root) as test_folders:
+      # Move to problem folder.
+      with Cwd(prob.path) as cwd:
+        # Missing all names.
+        with self.assertRaises(KeyError):
+          a = Args(None, None, None, None, False)
+        # Specified different input.
         a = Args("OtherComp", "2017", "TestRound", "TestProblem", False)
         assert(a.competition == "OtherComp")
         assert(a.year == 2017)

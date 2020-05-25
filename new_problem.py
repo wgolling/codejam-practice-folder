@@ -1,4 +1,31 @@
 #!/usr/bin/python
+'''New Problem script.
+
+This script creates new problem folders for practicing coding competitions. There
+is a parameter for specifying whether it is an interactive problem, which is only
+acceptible for problems whose competition folder is `GoogleCodeJam` and in
+certain years.
+
+Example:
+  The user must specify the competition, the year (an integer), the round,
+  and the problem name. Some parameters are optional if the current working
+  directory is a subdirectory of the root practice folder, but the problem name
+  is always required. The following is typical usage::
+
+    $ python3 new_problem.py -c CodeJam -y 2020 -r Round1A -n PatternMatching
+
+    $ python3 ../../new_problem.py -r Round1A -n PatternMatching
+
+Todo:
+  * change -n to -p
+  * unit test FolderMaker
+  * documentation
+  * Verify the different template types. Currently can't find old templates?
+  * Make imports more specific
+  * underscore any attributes of functions that aren't public.
+  * Change Args constructor input to a dictionary?
+
+'''
 
 import sys, getopt, shutil
 from pathlib import Path
@@ -7,15 +34,13 @@ SCRIPT_PATH = Path(__file__).parent.resolve()
 
 def main(argv):
   # Validate input.
-  # If CWD is SCRIPT_PATH/<year> or SCRIPT_PATH/<year>/<round> then not all 
-  # arguments are required.
   a = process_input(argv)
   # Make new folder.
   fm = FolderMaker(a)
   try:
     fm.make_folder()
   except FileExistsError:
-    exit('Problem folder already exists.')
+    exit('Folder already exists with that name.')
   # Close program.
   sys.exit(0)
 
@@ -28,7 +53,7 @@ def exit(message, err=True):
 
 def process_input(argv):
   competition, year, round_name, name = None, None, None, None
-  interactive = False                                                         # In 2018 interactive problems were added.
+  interactive = False
   try:
     opts, args = getopt.getopt(argv, 'hic:y:r:n:', ['interactive', 'competition=' 'year=', 'round=', 'name='])
   except getopt.GetoptError:
@@ -57,9 +82,29 @@ def process_input(argv):
   return a
 
 class Args:
+  '''The Args class validates input from the command line.
+
+  Args:
+    competition (str): The name of the competition.
+    year (int): The year.
+    round_name (str): The name of the round.
+    name (str): The name of the problem.
+    interactive (bool): Indicates whether the problem is interactive.
+
+  Raises:
+    KeyError: If any parameters are missing. 
+    ValueError: If `year` is not an integer.
+    ValueError: If `interactive` is not compatible with `competition` and `year`.
+
+  Attributes:
+    competition (str): The name of the competition.
+    year (int): The year.
+    round_name (str): The name of the round.
+    name (str): The name of the problem.
+    interactive (bool): Indicates wether the problem is interactive.
+
   '''
-  An elementary data structure containing validated input.
-  '''
+
   def __init__(self, competition, year, round_name, prob_name, interactive):
     # If cwd is a subdirectory of the script's directoy, some arguments are optional.
     try:
@@ -113,10 +158,16 @@ class Args:
 
 
 class FolderMaker:
-  '''
-  A class handling the OS operations of making the new problem folder and
-  copying the appropriate template files.
-  '''
+  """FolderMaker handles the OS operations.
+
+  It has a make_folder method that creates a new problem folder and sets it up
+  with the appropriate template, based on a given Args instance.
+
+  Args:
+      a (Args): An Args instance containing the new problem's data.
+
+  """
+
   def __init__(self, a):
     self.competition  = a.competition
     self.year         = str(a.year)
@@ -126,19 +177,21 @@ class FolderMaker:
     self.problem_path = SCRIPT_PATH / self.competition / self.year / self.round_name / self.prob_name
 
   def make_folder(self):
+    '''Creates and sets up folder.
+
+    Returns:
+      The path to the new folder.
+
+    Raises:
+      FileExistsError: If directory already exists.
+
     '''
-    Throws FileExistsError if folder already exists.
-    '''
+
     # Create folder.
     path = self.problem_path
     path.mkdir(parents=True)
     print('Created folder {}/{}/{}/{}.'.format(self.competition, self.year, self.round_name, self.prob_name))
-    '''
-    In 2018 two changes were made in the contest format:
-    1) Rather than outputting results to a file, the code itself is uploaded
-       and outputs to stdout.
-    2) There are now Interactive problems.
-    '''
+    # Select the right template.
     template_name = ''
     prefix = ''
     if int(self.year) < 2018:
@@ -164,6 +217,7 @@ class FolderMaker:
     test_path = path / 'tests.in'
     test_path.touch()
     print('Created test file {}.'.format(str(rel_path / 'tests.in')))
+    return path
 
 if __name__ == "__main__":
   main(sys.argv[1:])

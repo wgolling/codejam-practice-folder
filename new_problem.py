@@ -12,14 +12,13 @@ Example:
   directory is a subdirectory of the root practice folder, but the problem name
   is always required. The following is typical usage::
 
-    $ python3 new_problem.py -c CodeJam -y 2020 -r Round1A -n PatternMatching
+    $ python3 new_problem.py -c CodeJam -y 2020 -r Round1A -p PatternMatching
 
-    $ python3 ../../new_problem.py -r Round1A -n PatternMatching
+    $ python3 ../../new_problem.py -r Round1A -p PatternMatching
 
 Todo:
   * change -n to -p
   * unit test FolderMaker
-  * documentation
   * Verify the different template types. Currently can't find old templates?
   * Make imports more specific
   * underscore any attributes of functions that aren't public.
@@ -45,7 +44,7 @@ def main(argv):
   sys.exit(0)
 
 def print_usage(err=True):
-  exit('usage: new_problem.py [-h] [-i] -c <competition> -y <year> -r <round> -n <name>', err=err)
+  exit('usage: new_problem.py [-h] [-i] -c <competition> -y <year> -r <round> -p <name>', err=err)
 
 def exit(message, err=True):
   print(message)
@@ -55,7 +54,7 @@ def process_input(argv):
   competition, year, round_name, name = None, None, None, None
   interactive = False
   try:
-    opts, args = getopt.getopt(argv, 'hic:y:r:n:', ['interactive', 'competition=' 'year=', 'round=', 'name='])
+    opts, args = getopt.getopt(argv, 'hic:y:r:p:', ['interactive', 'competition=' 'year=', 'round=', 'name='])
   except getopt.GetoptError:
     print_usage()
   else:
@@ -73,7 +72,7 @@ def process_input(argv):
           exit('Year {} must be an integer.'.format(year))
       elif opt in ('-r', '--round'):
         round_name = arg
-      elif opt in ('-n', '--name'):
+      elif opt in ('-p', '--name'):
         name = arg       
   try:
     a = Args(competition, year, round_name, name, interactive)

@@ -17,16 +17,14 @@ Example:
     $ python3 ../../new_problem.py -r Round1A -p PatternMatching
 
 Todo:
-  * change -n to -p
   * unit test FolderMaker
   * Verify the different template types. Currently can't find old templates?
-  * Make imports more specific
-  * underscore any attributes of functions that aren't public.
   * Change Args constructor input to a dictionary?
 
 '''
 
-import sys, getopt, shutil
+import sys, shutil
+from getopt import getopt, GetoptError
 from pathlib import Path
 
 SCRIPT_PATH = Path(__file__).parent.resolve()
@@ -54,8 +52,8 @@ def process_input(argv):
   competition, year, round_name, name = None, None, None, None
   interactive = False
   try:
-    opts, args = getopt.getopt(argv, 'hic:y:r:p:', ['interactive', 'competition=' 'year=', 'round=', 'name='])
-  except getopt.GetoptError:
+    opts, args = getopt(argv, 'hic:y:r:p:', ['interactive', 'competition=' 'year=', 'round=', 'name='])
+  except GetoptError:
     print_usage()
   else:
     for opt, arg in opts:
@@ -123,9 +121,9 @@ class Args:
       if len(rel_parts) < 2:
         raise KeyError("Missing year.")
       else:
-        year = self.try_year(rel_parts[1])
+        year = self._try_year(rel_parts[1])
     else:
-      year = self.try_year(year)
+      year = self._try_year(year)
     # Validate round variable.
     if not round_name:
       if len(rel_parts) < 3:
@@ -149,7 +147,7 @@ class Args:
     self.prob_name    = prob_name
     self.interactive  = interactive
 
-  def try_year(self, year):
+  def _try_year(self, year):
     try:
       return int(year)
     except ValueError as e:
@@ -163,17 +161,20 @@ class FolderMaker:
   with the appropriate template, based on a given Args instance.
 
   Args:
-      a (Args): An Args instance containing the new problem's data.
+    a (Args): An Args instance containing the new problem's data.
+
+  Attributes:
+    problem_path (Path): pathlib.Path instance to destination folder.
 
   """
 
   def __init__(self, a):
-    self.competition  = a.competition
-    self.year         = str(a.year)
-    self.round_name   = a.round_name
-    self.prob_name    = a.prob_name
-    self.interactive  = a.interactive
-    self.problem_path = SCRIPT_PATH / self.competition / self.year / self.round_name / self.prob_name
+    self._competition  = a.competition
+    self._year         = str(a.year)
+    self._round_name   = a.round_name
+    self._prob_name    = a.prob_name
+    self._interactive  = a.interactive
+    self.problem_path = SCRIPT_PATH / self._competition / self._year / self._round_name / self._prob_name
 
   def make_folder(self):
     '''Creates and sets up folder.
@@ -189,13 +190,13 @@ class FolderMaker:
     # Create folder.
     path = self.problem_path
     path.mkdir(parents=True)
-    print('Created folder {}/{}/{}/{}.'.format(self.competition, self.year, self.round_name, self.prob_name))
+    print('Created folder {}/{}/{}/{}.'.format(self._competition, self._year, self._round_name, self._prob_name))
     # Select the right template.
     template_name = ''
     prefix = ''
-    if int(self.year) < 2018:
+    if int(self._year) < 2018:
       prefix = 'pre2018'
-    elif self.interactive:
+    elif self._interactive:
       prefix = 'interactive'
     if len(prefix) > 0:
       template_name = prefix + '-'
@@ -204,7 +205,7 @@ class FolderMaker:
     template_path = SCRIPT_PATH / 'templates' / template_name
     dest_path = path / 'main.py'
     shutil.copy(str(template_path), str(dest_path))
-    if self.interactive and int(self.year) >= 2019:
+    if self._interactive and int(self._year) >= 2019:
       # Although there are interactive problems in 2018 their local testing tool
       # is bundled with an interactive runner.
       runner_path = SCRIPT_PATH / 'templates' / 'interactive_runner.py'

@@ -3,7 +3,7 @@ import shutil
 from pathlib import Path
 from unittest import TestCase
 
-from new_problem import Args, SCRIPT_PATH
+from new_problem import Args, FolderMaker
 
 TEST_PATH = Path(__file__).parent.resolve()
 
@@ -30,7 +30,7 @@ class TestFolders():
     with the root representing TEST_PATH.
     '''
     self.tree = tree 
-    self.tree.path = SCRIPT_PATH
+    self.tree.path = TEST_PATH
 
   def __enter__(self):
     # Create test folder structure.
@@ -217,3 +217,40 @@ class TestArgs(TestCase):
         assert(a.round_name == "TestRound")
         assert(a.prob_name == "TestProblem")
         assert(a.interactive == False)
+
+
+class TestFolderMaker(TestCase):
+
+  def unused_comp(self):
+    prefix = "Comp"
+    suffix = 0
+    comp_name = prefix + str(suffix)
+    while (TEST_PATH / comp_name).is_dir():
+      suffix += 1
+      comp_name = prefix + str(suffix)
+    return comp_name
+
+  def try_args(self, args):
+    fm = FolderMaker(args)
+    path = fm.make_folder()
+    parts = path.parts
+    try:
+      assert(parts[-1] == args.prob_name)
+      assert(parts[-2] == args.round_name)
+      assert(parts[-3] == str(args.year))
+      assert(parts[-4] == args.competition)
+    except:
+      raise
+    finally:
+      shutil.rmtree(TEST_PATH / args.competition)
+
+  def test_constructor(self):
+    self.try_args(Args(self.unused_comp(), "2017", "TestRound", "TestProblem", False)
+)
+
+
+
+
+
+
+

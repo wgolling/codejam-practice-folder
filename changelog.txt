@@ -2,6 +2,7 @@ Current update:
 --------------
 - Added functionality for multiple competitions. (Note: this obsoletes the old interface.)
 - Wrote unit tests for the Args class, including context managers for setting up/tearing down test folders and changing the CWD.
+- Added docstrings.
 - Changed `-n` flag to `-p`.
 
 v1.1.1:

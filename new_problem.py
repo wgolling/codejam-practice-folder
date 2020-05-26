@@ -168,12 +168,13 @@ class FolderMaker:
 
   """
 
-  def __init__(self, a):
+  def __init__(self, a, test_mode=False):
     self._competition  = a.competition
     self._year         = str(a.year)
     self._round_name   = a.round_name
     self._prob_name    = a.prob_name
     self._interactive  = a.interactive
+    self._test_mode    = test_mode
     self.problem_path = SCRIPT_PATH / self._competition / self._year / self._round_name / self._prob_name
 
   def make_folder(self):
@@ -190,7 +191,7 @@ class FolderMaker:
     # Create folder.
     path = self.problem_path
     path.mkdir(parents=True)
-    print('Created folder {}/{}/{}/{}.'.format(self._competition, self._year, self._round_name, self._prob_name))
+    self._output('Created folder {}/{}/{}/{}.'.format(self._competition, self._year, self._round_name, self._prob_name))
     # Select the right template.
     template_name = ''
     prefix = ''
@@ -212,12 +213,16 @@ class FolderMaker:
       runner_dest = path / 'interactive_runner.py'
       shutil.copy(str(runner_path), str(runner_dest))
     rel_path = path.relative_to(path.parents[2])
-    print('Copied {} template to {}.'.format(prefix, str(rel_path  / 'main.py')))
+    self._output('Copied {} template to {}.'.format(prefix, str(rel_path  / 'main.py')))
     # Create tests file.
     test_path = path / 'tests.in'
     test_path.touch()
-    print('Created test file {}.'.format(str(rel_path / 'tests.in')))
+    self._output('Created test file {}.'.format(str(rel_path / 'tests.in')))
     return path
+
+  def _output(self, text):
+    if not self._test_mode:
+      print(text)
 
 if __name__ == "__main__":
   main(sys.argv[1:])

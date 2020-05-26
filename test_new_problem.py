@@ -221,32 +221,21 @@ class TestArgs(TestCase):
 
 class TestFolderMaker(TestCase):
 
-  def unused_comp(self):
-    prefix = "Comp"
-    suffix = 0
-    comp_name = prefix + str(suffix)
-    while (TEST_PATH / comp_name).is_dir():
-      suffix += 1
-      comp_name = prefix + str(suffix)
-    return comp_name
-
-  def try_args(self, args):
-    fm = FolderMaker(args)
-    path = fm.make_folder()
-    parts = path.parts
-    try:
+  def test_constructor(self):
+    comp = Node("Comp", [])
+    root = Node("root", [comp])
+    with TestFolders(root) as test_tree:
+      comp_name = comp.path.parts[-1]
+      args = Args(comp_name, "2017", "TestRound", "TestProblem", False)
+      fm = FolderMaker(args, test_mode=True)
+      new_folder = fm.make_folder()
+      parts = new_folder.parts
       assert(parts[-1] == args.prob_name)
       assert(parts[-2] == args.round_name)
       assert(parts[-3] == str(args.year))
       assert(parts[-4] == args.competition)
-    except:
-      raise
-    finally:
-      shutil.rmtree(TEST_PATH / args.competition)
-
-  def test_constructor(self):
-    self.try_args(Args(self.unused_comp(), "2017", "TestRound", "TestProblem", False)
-)
+      assert(new_folder / "tests.in").exists()
+      assert(new_folder / "main.py").exists()
 
 
 

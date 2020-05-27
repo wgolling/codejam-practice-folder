@@ -1,6 +1,6 @@
 # Code Jam Practice Folder
 
-v1.1.1
+v2.0.0
 
 Provides Python template files for coding competition problems (currently just Google's CodeJam and Kickstart) and a script for making a new problem folder. There is a standard template, as well as a template for interactive problems.
 

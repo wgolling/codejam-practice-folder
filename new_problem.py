@@ -18,7 +18,6 @@ Example:
 
 Todo:
   * unit test FolderMaker
-  * Verify the different template types. Currently can't find old templates?
   * Change Args constructor input to a dictionary?
 
 '''

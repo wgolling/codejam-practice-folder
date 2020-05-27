@@ -28,8 +28,6 @@ If `-h` is included the program displays usage and then it exits. If the require
 
 * Unit test the FolderMaker class.
 
-* Improve templates.
-
 ## Author
 
 * **William Gollinger**

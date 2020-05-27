@@ -238,9 +238,8 @@ class TestFolderMaker(TestCase):
       assert(new_folder / "tests.in").exists()
       assert(new_folder / "main.py").exists()
       with open(new_folder / "main.py", 'r') as f:
-        f.readline()
         head = f.readline().strip()
-        assert(head == "Standard template.")
+        assert(head == "'''Standard template.")
       # Test interactive.
       i_args = Args(comp_name, "2018", "TestRound", "TestProblem", True)
       fm = FolderMaker(i_args, test_mode=True)
@@ -253,9 +252,8 @@ class TestFolderMaker(TestCase):
       assert(new_folder / "tests.in").exists()
       assert(new_folder / "main.py").exists()
       with open(new_folder / "main.py", 'r') as f:
-        f.readline()
         head = f.readline().strip()
-        assert(head == "Interactive template.")
+        assert(head == "'''Interactive template.")
 
 
 

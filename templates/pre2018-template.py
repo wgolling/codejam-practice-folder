@@ -1,4 +1,5 @@
-'''
+'''Pre-2018 Template
+
 Before 2018, solutions were submitted in text files with the extention `.out`.
 Download the approprite input files from the problem description and put them
 in the problem folder, then change the FILENAME variable appropriately.

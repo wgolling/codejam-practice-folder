@@ -1,5 +1,5 @@
-'''
-Interactive template.
+'''Interactive template.
+
 This template is suitable for Python3 solutions to interactive CodeJam problems.
 
 This example works out the "Find The Heavy Ball" problem.

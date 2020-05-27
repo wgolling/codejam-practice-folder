@@ -1,5 +1,5 @@
-'''
-Standard template.
+'''Standard template.
+
 This template is suitable for Python3 solutions to standard problems in 
 Google's CodeJame and Kickstart competitions.
 '''

@@ -2,7 +2,7 @@ Current update:
 --------------
 - Very recently (Spring 2020) Google changed their archived competition format. Whereas pre-2018 competitions used to have a different upload procedure (uploading a text file with the answers rather than your code), they have updated their system so that old competitions now use the new format. As such this script no longer uses the pre-2018 template, but it still remains in the templates file just in case.
 - Added functionality for multiple competitions. (Note: this obsoletes the old interface.)
-- Wrote unit tests for the Args class, including context managers for setting up/tearing down test folders and changing the CWD.
+- Wrote unit tests for the Args and FolderMaker classes and the process_input function, including context managers for setting up/tearing down test folders and changing the CWD.
 - Added docstrings.
 - Changed `-n` flag to `-p`.
 - Substantially improved interactive template, with a worked example.

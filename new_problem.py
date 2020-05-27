@@ -28,16 +28,16 @@ from pathlib import Path
 SCRIPT_PATH = Path(__file__).parent.resolve()
 
 def main(argv):
-  # Validate input.
-  a = process_input(argv)
-  # Make new folder.
-  fm = FolderMaker(a)
   try:
+    # Validate input.
+    a = process_input(argv)
+    if a == "help":
+      print_usage(err=False)
+    # Make new folder.
+    fm = FolderMaker(a)
     fm.make_folder()
-  except FileExistsError:
-    exit('Folder already exists with that name.')
-  # Close program.
-  sys.exit(0)
+  except Exception as e:
+    exit("{}".format(e))
 
 def print_usage(err=True):
   exit('usage: new_problem.py [-h] [-i] -c <competition> -y <year> -r <round> -p <name>', err=err)
@@ -56,7 +56,7 @@ def process_input(argv):
   else:
     for opt, arg in opts:
       if opt == '-h':
-        print_usage(err=False)
+        return 'help'
       elif opt in ('-i', '--interactive'):
         interactive = True
       elif opt in ('-c', '--competition'):
@@ -64,16 +64,17 @@ def process_input(argv):
       elif opt in ('-y', '--year'):
         try:
           year = int(arg)
-        except:
-          exit('Year {} must be an integer.'.format(year))
+        except ValueError as e:
+          raise ValueError('Year {} must be an integer.'.format(arg)) from e
+          # exit('Year {} must be an integer.'.format(year))
       elif opt in ('-r', '--round'):
         round_name = arg
       elif opt in ('-p', '--name'):
         name = arg       
   try:
     a = Args(competition, year, round_name, name, interactive)
-  except Exception as e:
-    exit("{}".format(e))
+  except:
+    raise
   return a
 
 class Args:
@@ -206,7 +207,7 @@ class FolderMaker:
       runner_path = SCRIPT_PATH / 'templates' / 'interactive_runner.py'
       runner_dest = path / 'interactive_runner.py'
       shutil.copy(str(runner_path), str(runner_dest))
-    rel_path = path.relative_to(path.parents[2])
+    rel_path = path.relative_to(path.parents[3])
     self._output('Copied {} template to {}.'.format(prefix, str(rel_path  / 'main.py')))
     # Create tests file.
     test_path = path / 'tests.in'
@@ -220,3 +221,5 @@ class FolderMaker:
 
 if __name__ == "__main__":
   main(sys.argv[1:])
+  # Close program.
+  sys.exit(0)

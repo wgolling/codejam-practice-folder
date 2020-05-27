@@ -3,7 +3,7 @@ import shutil
 from pathlib import Path
 from unittest import TestCase
 
-from new_problem import Args, FolderMaker
+from new_problem import Args, FolderMaker, process_input
 
 TEST_PATH = Path(__file__).parent.resolve()
 
@@ -240,6 +240,8 @@ class TestFolderMaker(TestCase):
       with open(new_folder / "main.py", 'r') as f:
         head = f.readline().strip()
         assert(head == "'''Standard template.")
+      with self.assertRaises(FileExistsError):
+        fm.make_folder()
       # Test interactive.
       i_args = Args(comp_name, "2018", "TestRound", "TestProblem", True)
       fm = FolderMaker(i_args, test_mode=True)
@@ -254,3 +256,22 @@ class TestFolderMaker(TestCase):
       with open(new_folder / "main.py", 'r') as f:
         head = f.readline().strip()
         assert(head == "'''Interactive template.")
+      with self.assertRaises(FileExistsError):
+        fm.make_folder()
+
+class TestProcessInput(TestCase):
+
+  def test_process_input(self):
+    comp = Node("Comp", [])
+    root = Node("root", [comp])
+    with TestFolders(root) as test_folders:
+      comp_name = comp.path.parts[-1]
+      args = ['-c', comp_name, '-y', '2017', '-r', 'TestRound', '-p', 'TestProblem']
+      process_input(args)
+      args = ['-c', comp_name, '-y', '2018', '-r', 'TestRound', '-p', 'TestProblem2', '-i']
+      process_input(args)
+      args = ['-c', comp_name, '-y', 'blah', '-r', 'TestRound', '-p', 'TestProblem']
+      with self.assertRaises(ValueError):
+        process_input(args)
+      args = ['-c', comp_name, '-y', '2017', '-r', 'TestRound', '-p', 'TestProblem', '-h']
+      assert(process_input(args) == "help")

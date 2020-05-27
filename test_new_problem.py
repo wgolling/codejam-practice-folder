@@ -221,7 +221,7 @@ class TestArgs(TestCase):
 
 class TestFolderMaker(TestCase):
 
-  def test_constructor(self):
+  def test_folder_making(self):
     comp = Node("Comp", [])
     root = Node("root", [comp])
     with TestFolders(root) as test_tree:

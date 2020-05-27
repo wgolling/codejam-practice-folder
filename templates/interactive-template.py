@@ -21,15 +21,17 @@ def solve(balls, guesses):
   start, end = 0, balls
   # Loop invariant: end - start is always a power of 3.
   while end - start > 1:
+    # Prepare the output.
     third = (end - start) // 3
     left = [str(x) for x in range(start, start + third)]
     right = [str(x) for x in range(start + third, start + 2 * third)]
-    # Print the input for the tester.
+    # Print the output for the tester.
     print(" ".join(left) + " # " + " ".join(right))
     # Flush stdout.
     sys.stdout.flush()
     # Get new input.
     s = input()
+    # Process response.
     if s == "-1":
       print("Something went wrong.")
       sys.exit()

@@ -17,7 +17,6 @@ Example:
     $ python3 ../../new_problem.py -r Round1A -p PatternMatching
 
 Todo:
-  * unit test FolderMaker
   * Change Args constructor input to a dictionary?
 
 '''

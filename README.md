@@ -26,7 +26,6 @@ If `-h` is included the program displays usage and then it exits. If the require
 
 ## TODO
 
-* Unit test the FolderMaker class.
 
 ## Author
 

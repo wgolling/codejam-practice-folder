@@ -254,11 +254,3 @@ class TestFolderMaker(TestCase):
       with open(new_folder / "main.py", 'r') as f:
         head = f.readline().strip()
         assert(head == "'''Interactive template.")
-
-
-
-
-
-
-
-

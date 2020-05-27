@@ -226,6 +226,7 @@ class TestFolderMaker(TestCase):
     root = Node("root", [comp])
     with TestFolders(root) as test_tree:
       comp_name = comp.path.parts[-1]
+      # Test non-interactive.
       args = Args(comp_name, "2017", "TestRound", "TestProblem", False)
       fm = FolderMaker(args, test_mode=True)
       new_folder = fm.make_folder()
@@ -236,6 +237,26 @@ class TestFolderMaker(TestCase):
       assert(parts[-4] == args.competition)
       assert(new_folder / "tests.in").exists()
       assert(new_folder / "main.py").exists()
+      with open(new_folder / "main.py", 'r') as f:
+        f.readline()
+        head = f.readline().strip()
+        assert(head == "Standard template.")
+      # Test interactive.
+      i_args = Args(comp_name, "2018", "TestRound", "TestProblem", True)
+      fm = FolderMaker(i_args, test_mode=True)
+      new_folder = fm.make_folder()
+      parts = new_folder.parts
+      assert(parts[-1] == i_args.prob_name)
+      assert(parts[-2] == i_args.round_name)
+      assert(parts[-3] == str(i_args.year))
+      assert(parts[-4] == i_args.competition)
+      assert(new_folder / "tests.in").exists()
+      assert(new_folder / "main.py").exists()
+      with open(new_folder / "main.py", 'r') as f:
+        f.readline()
+        head = f.readline().strip()
+        assert(head == "Interactive template.")
+
 
 
 

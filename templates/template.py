@@ -1,6 +1,7 @@
 '''
-Starting in 2018 solutions are uploaded as stand-alone code, to be run by a 
-specified interpreter/compiler. This template is suitable for Python3.
+Standard template.
+This template is suitable for Python3 solutions to standard problems in 
+Google's CodeJame and Kickstart competitions.
 '''
 def main():
   T = int(input())                                                            # The first input is the number of test cases.

@@ -1,3 +1,6 @@
+'''
+Interactive template.
+'''
 import sys
 
 def solve(a, b):

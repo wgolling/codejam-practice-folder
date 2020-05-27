@@ -194,14 +194,10 @@ class FolderMaker:
     self._output('Created folder {}/{}/{}/{}.'.format(self._competition, self._year, self._round_name, self._prob_name))
     # Select the right template.
     template_name = ''
-    prefix = ''
-    if int(self._year) < 2018:
-      prefix = 'pre2018'
-    elif self._interactive:
-      prefix = 'interactive'
+    prefix = 'interactive' if self._interactive else ''
     if len(prefix) > 0:
       template_name = prefix + '-'
-    template_name += "template.py"
+    template_name += 'template.py'
     # Copy template file.
     template_path = SCRIPT_PATH / 'templates' / template_name
     dest_path = path / 'main.py'
